@@ -33,6 +33,12 @@ class ScriptModificationListener(private val project: Project) {
     private val changedDocumentsQueue = MergingUpdateQueue("ScriptModificationListener: Scripts queue", 1000, false, ANY_COMPONENT, project)
 
     init {
+        showNotificationIfScriptChangedListener()
+
+        saveScriptAfterModificationListener()
+    }
+
+    private fun showNotificationIfScriptChangedListener() {
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, object : BulkFileListener.Adapter() {
             override fun after(events: List<VFileEvent>) {
                 if (ApplicationManager.getApplication().isUnitTestMode) return
@@ -52,7 +58,9 @@ class ScriptModificationListener(private val project: Project) {
                 }
             }
         })
+    }
 
+    private fun saveScriptAfterModificationListener() {
         // partially copied from ExternalSystemProjectsWatcherImpl before fix will be implemented in IDEA:
         // "Gradle projects need to be imported" notification should be shown when kotlin script is modified
         val busConnection = project.messageBus.connect(changedDocumentsQueue)
