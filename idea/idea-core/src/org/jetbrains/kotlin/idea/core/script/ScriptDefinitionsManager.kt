@@ -46,7 +46,7 @@ class ScriptDefinitionsManager(private val project: Project): ScriptDefinitionPr
     private var definitionsByContributor = mutableMapOf<ScriptDefinitionContributor, List<KotlinScriptDefinition>>()
     private var definitions: List<KotlinScriptDefinition> = emptyList()
 
-    var isFailedToLoadDefinitions = false
+    var hasFailedDefinitions = false
         private set
 
     fun reloadDefinitionsBy(contributor: ScriptDefinitionContributor) = lock.write {
@@ -57,7 +57,7 @@ class ScriptDefinitionsManager(private val project: Project): ScriptDefinitionPr
 
         definitionsByContributor[contributor] = contributor.safeGetDefinitions()
 
-        isFailedToLoadDefinitions = getContributors().any { it.isError() }
+        hasFailedDefinitions = getContributors().any { it.isError() }
 
         updateDefinitions()
     }
@@ -105,7 +105,7 @@ class ScriptDefinitionsManager(private val project: Project): ScriptDefinitionPr
             definitionsByContributor[contributor] = definitions
         }
 
-        isFailedToLoadDefinitions = getContributors().any { it.isError() }
+        hasFailedDefinitions = getContributors().any { it.isError() }
 
         updateDefinitions()
     }

@@ -117,7 +117,7 @@ class ScriptDependenciesUpdater(
     }
 
     private fun updateAsync(file: VirtualFile) {
-        if (ScriptDefinitionsManager.getInstance(project).isFailedToLoadDefinitions && !ProjectRootsUtil.isProjectSourceFile(project, file)) {
+        if (ScriptDefinitionsManager.getInstance(project).hasFailedDefinitions && !ProjectRootsUtil.isProjectSourceFile(project, file)) {
             return
         }
 
