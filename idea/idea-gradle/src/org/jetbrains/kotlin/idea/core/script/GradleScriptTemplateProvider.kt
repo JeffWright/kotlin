@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.idea.core.script
 
 import com.intellij.execution.configurations.CommandLineTokenizer
 import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.externalSystem.model.task.ExternalSystemTaskId
 import com.intellij.openapi.externalSystem.model.task.ExternalSystemTaskNotificationListenerAdapter
 import com.intellij.openapi.externalSystem.model.task.ExternalSystemTaskType
@@ -216,7 +217,7 @@ class ReloadGradleTemplatesOnSync : ExternalSystemTaskNotificationListenerAdapte
             val gradleDefinitionsContributor = ScriptDefinitionContributor.find<GradleScriptDefinitionsContributor>(project)
             gradleDefinitionsContributor?.reloadIfNeccessary()
 
-            ServiceManager.getService(project, ScriptDependenciesUpdater::class.java).reloadModifiedScripts()
+            project.service<ScriptDependenciesUpdater>().reloadModifiedScripts()
         }
     }
 }
