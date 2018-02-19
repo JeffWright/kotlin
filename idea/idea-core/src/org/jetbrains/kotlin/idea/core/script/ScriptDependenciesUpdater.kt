@@ -171,6 +171,9 @@ class ScriptDependenciesUpdater(
         val rootsChanged = cache.hasNotCachedRoots(new)
         if (cache.save(file, new)) {
             file.scriptDependencies = new
+
+            // Drop caches for synthetic files with old dependencies
+            ProjectRootManager.getInstance(project).incModificationCount()
         }
         return rootsChanged
     }
