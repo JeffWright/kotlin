@@ -57,7 +57,7 @@ class ScriptDefinitionsManager(private val project: Project): ScriptDefinitionPr
 
         definitionsByContributor[contributor] = contributor.safeGetDefinitions()
 
-        isFailedToLoadDefinitions = contributor.isError()
+        isFailedToLoadDefinitions = getContributors().any { it.isError() }
 
         updateDefinitions()
     }
