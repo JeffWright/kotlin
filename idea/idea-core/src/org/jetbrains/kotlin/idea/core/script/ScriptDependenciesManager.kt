@@ -76,8 +76,7 @@ class ScriptDependenciesManager internal constructor(
         @TestOnly
         fun updateScriptDependenciesSynchronously(virtualFile: VirtualFile, project: Project) {
             with(getInstance(project)) {
-                val scriptDefinition = ScriptDefinitionProvider.getInstance(project).findScriptDefinition(virtualFile)!!
-                cacheUpdater.updateSync(virtualFile, scriptDefinition)
+                cacheUpdater.update(virtualFile)
                 cacheUpdater.notifyRootsChanged()
             }
         }

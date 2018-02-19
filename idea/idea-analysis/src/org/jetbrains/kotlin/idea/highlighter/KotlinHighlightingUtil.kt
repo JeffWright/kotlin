@@ -19,7 +19,7 @@ package org.jetbrains.kotlin.idea.highlighter
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.caches.resolve.NotUnderContentRootModuleInfo
 import org.jetbrains.kotlin.idea.caches.resolve.getModuleInfo
-import org.jetbrains.kotlin.idea.core.script.ScriptDefinitionsManager
+import org.jetbrains.kotlin.idea.core.script.scriptDependencies
 import org.jetbrains.kotlin.idea.util.ProjectRootsUtil
 import org.jetbrains.kotlin.psi.KtCodeFragment
 import org.jetbrains.kotlin.psi.KtFile
@@ -33,11 +33,7 @@ object KotlinHighlightingUtil {
         }
 
         if (ktFile.isScript()) {
-            return if (ScriptDefinitionsManager.getInstance(psiElement.project).isFailedToLoadDefinitions) {
-                ProjectRootsUtil.isInProjectSource(ktFile)
-            } else {
-                true
-            }
+            return ktFile.virtualFile.scriptDependencies != null
         }
 
         return ProjectRootsUtil.isInProjectOrLibraryContent(ktFile) && ktFile.getModuleInfo() !is NotUnderContentRootModuleInfo
@@ -53,9 +49,7 @@ object KotlinHighlightingUtil {
         }
 
         if (ktFile.isScript()) {
-            if (!ScriptDefinitionsManager.getInstance(psiElement.project).isFailedToLoadDefinitions) {
-                return true
-            }
+            return ktFile.virtualFile.scriptDependencies != null
         }
 
         return ProjectRootsUtil.isInProjectSource(ktFile)
